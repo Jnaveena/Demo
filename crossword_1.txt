@@ -12,3 +12,4 @@ CROSS WORD PUZZLE
 11.Triggers
 12.Packages
 
+These are technical words
