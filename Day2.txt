@@ -1,0 +1,110 @@
+declare 
+    v_name varchar(40):='Hello World';
+begin
+
+    dbms_ouput.put_line( 'Name is : ' || v_name);
+
+end;
+-----------------------------
+
+declare 
+    x_emp employee%ROWTYPE;
+begin
+    select fname,lname,sex,salary into
+    x_emp.fname,x_emp.lname,x_emp.sex,x_emp.salary 
+    from employee
+    where eid = 002;
+    
+    dbms_output.put_line(x_emp.fname || ' ' || x_emp.lname || 
+    'Salary is $' ||x_emp.salary);
+end;
+-----------------------------
+
+declare 
+    v_name varchar(40):='Hello World';
+    v_date Date;
+begin
+    v_date := SYSDATE-1;
+     dbms_output.put_line('hello world');
+     dbms_output.put_line('Name is :  ' || v_name);
+     dbms_output.put_line('Date is :  ' || v_date);
+end;
+
+-------------------------------------
+
+declare 
+	Type BonusCompensation
+	    Is Record(CashPayment Number(6),
+			company car boolean,
+			VacationWeeks number(2));
+
+	Type EmpRecord
+	    Is Record(ssn employee.ssn%Type,
+			fname employee.fname%type,
+			dname department.dname%type,
+			bonusPayment BonusCompensation);
+	Type ManagerRecord
+	    Is Record(ssn employee.ssn%type,
+			BonusPayment BonusCompensation);
+--userdefined data types
+
+	BestEmp EmpRecord;
+	BestManager ManagerRecord;
+
+begin
+
+	select essn,lName,dname into
+		BestEmp.ssn,BestEmp.lname,BestEmp.Dname
+		from employee,department,works_on
+		where employee.dno = department.dnumber
+		and employee.ssn = works_on.essn
+		and hours = (select max(hours)from works_on
+		and Rownum<=1;
+	BestEmp.BonusPayment.CashPayment :=5000;
+	BestEmp.BonusPayment.CompanyCar:= true;
+	BestEmp.BonusPayment.VacationWeeks:=1;
+
+	dbms_output.put_line('Best Employee Name: '||BestEmp.lname); 
+	dbms_output.put_line('Best Employee Department: '||BestEmp.dname'); 
+	dbms_output.put_line('Best Employee Bonus Payment: '||BestEmp.BonusPayment'); 	
+	
+	If BestEmp.BonusPayment.CompanyCar = true then
+		dbms_output.put_line('Company Car also Provided');	
+
+	end if;
+	if BestEmp.BonusPayment.VacationWeeks>0 then
+		dbms_output.put_line('Extra vacation weeks granted '||BestEmp.BonusPayment);
+	
+	end if;
+end;
+-------------------------------
+type,rowtype and record
+
+declare
+    type emp is record(id employee.eid%type,
+                    f_name employee.fname%type,
+                    l_name employee.lname%type);
+                    
+        BasicEmp emp;
+	
+	BasicEmp employee % Rowtype;
+        
+    begin
+    
+        BasicEmp.id :=001;
+        select eid,fname,lname into BasicEmp from employee where eid = BasicEmp.id;
+        dbms_output.put_line('Employee'|| BasicEmp.f_name);
+    end;
+
+--------------------------------
+
+declare 
+
+    nvalue Number(10) := &entervalue;
+    vmessage varchar(30);
+begin
+    if nvalue > 6000 then
+    vmessage := q ' !the value isnt valid.! ';
+    dbms_output.put_line(vmessage);
+    end if;
+end;
